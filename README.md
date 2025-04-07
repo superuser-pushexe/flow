@@ -12,11 +12,6 @@ A **minimal X11 desktop environment** written entirely in **Python 3.12**, featu
 
 ---
 
-## 📸 Screenshots
-
-_Add screenshots here if available._
-
----
 
 ## 📦 Features
 
