@@ -1,6 +1,6 @@
 # 🐍 Python X11 Desktop Environment
 
-A **minimal X11 desktop environment** written entirely in **Python 3.12**, featuring:
+A **minimal X11 desktop environment** written (almost) entirely in **Python 3.12**, featuring:
 
 - ✅ Custom wallpaper support  
 - ✅ Floating window manager  
