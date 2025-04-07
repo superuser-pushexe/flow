@@ -1,2 +1,4 @@
 PyQt5
 python-xlib
+x-terminal-emulator
+xdg-open
