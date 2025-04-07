@@ -1,5 +1,5 @@
 {
-  "wallpaper": "/usr/share/backgrounds/default.jpg",
+  "wallpaper": "wallpaper_lake.png",
   "apps": [
     { "name": "Terminal", "command": ["x-terminal-emulator"] },
     { "name": "File Manager", "command": ["xdg-open", "."] },
