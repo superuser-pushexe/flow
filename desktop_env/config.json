@@ -1,5 +1,5 @@
 {
-  "wallpaper": "wallpaper_lake.png",
+  "wallpaper": "wallpaper_lake.png.png",
   "apps": [
     { "name": "Terminal", "command": ["x-terminal-emulator"] },
     { "name": "File Manager", "command": ["xdg-open", "."] },
