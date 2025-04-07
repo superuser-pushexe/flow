@@ -1,4 +1,4 @@
-# Flow: A Python X11 Desktop Environment
+ # Flow: A Python X11 Desktop Environment
 
 A **minimal X11 desktop environment** written (almost) entirely in **Python 3.12**, featuring:
 
