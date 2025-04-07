@@ -1,3 +1,10 @@
 {
-  "wallpaper": "/usr/share/backgrounds/default.jpg"
+  "wallpaper": "/usr/share/backgrounds/default.jpg",
+  "apps": [
+    { "name": "Terminal", "command": ["x-terminal-emulator"] },
+    { "name": "File Manager", "command": ["xdg-open", "."] },
+    { "name": "Browser", "command": ["xdg-open", "http://www.google.com"] },
+    { "name": "VS Code", "command": ["code"] },
+    { "name": "Calculator", "command": ["gnome-calculator"] }
+  ]
 }
