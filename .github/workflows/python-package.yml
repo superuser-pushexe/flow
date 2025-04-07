@@ -20,6 +20,8 @@ jobs:
 
     permissions:
       contents: write
+      packages: write
+      issues: write
 
 
     steps:
