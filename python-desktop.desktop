@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Python Desktop
+Comment=Minimal Python X11 Desktop Environment
+Exec=/opt/python-desktop/main.py
+Type=Application

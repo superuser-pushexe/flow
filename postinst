@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "Installing Python Desktop..."
+chmod +x /opt/python-desktop/main.py
