@@ -8,3 +8,5 @@
     { "name": "Calculator", "command": ["gnome-calculator"] }
   ]
 }
+#wallpaper is the wallpaper
+#apps defines the apps in the taskbar
