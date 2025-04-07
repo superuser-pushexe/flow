@@ -62,6 +62,8 @@ Log out and select "Python Desktop" from your session manager (e.g., LightDM or 
 
 ### 📁 Project Structure
 
+
+```text
 python-desktop-x11/
 ├── desktop_env/              # Core desktop components
 │   ├── main.py               # Entry point
@@ -80,6 +82,8 @@ python-desktop-x11/
 ├── build_deb.sh              # .deb package builder
 ├── LICENSE
 └── README.md
+```
+
 ### 🖼 Customizing the Wallpaper
 #### Option 1: Manually edit the config file
 Edit the config.json file:
