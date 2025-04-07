@@ -27,7 +27,7 @@ A **minimal X11 desktop environment** written (almost) entirely in **Python 3.12
 
 ## 🚀 Getting Started
 
-### 🔧 Requirements
+###  Requirements
 
 - Python 3.12+
 - `PyQt5`
@@ -97,13 +97,13 @@ Edit the config.json file:
 This opens a file dialog where you can pick an image. It will update the config automatically and refresh your wallpaper.
 
 ### ❓ FAQ
-Can I use this as my daily driver?
+#### Can I use this as my daily driver?
 Not recommended. This is a minimal, experimental desktop for educational or hacking purposes.
 
-Does it support Wayland?
+#### Does it support Wayland?
 No — this project only works with X11.
 
-Can I run this inside a VM or Xephyr?
+#### Can I run this inside a VM or Xephyr?
 Yes! That’s a great way to test it without logging out of your current session.
 
 ### 📃 License
