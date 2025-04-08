@@ -58,14 +58,19 @@ class AppsMenu(QWidget):
         for i, app_entry in enumerate(apps):
             name = app_entry.get("name")
             command = app_entry.get("command")
+            icon_path = app_entry.get("icon")  # Optional icon path
             if name and command:
                 btn = QPushButton(name)
+                if icon_path:
+                    btn.setIcon(QIcon(icon_path))
+                    btn.setIconSize(QSize(24, 24))
                 btn.setStyleSheet("""
                     QPushButton {
                         background: #333;
                         padding: 10px;
                         border: none;
                         color: white;
+                        text-align: left;
                     }
                     QPushButton:hover {
                         background: #555;
@@ -95,7 +100,6 @@ class Taskbar(QMainWindow):
         self.apps = self.config.get("apps", [])
         self.windows = []  # Track open windows
 
-        # Taskbar position from config
         position = self.config.get("taskbar_position", "top")
         screen = QApplication.primaryScreen().geometry()
         height = 30
@@ -105,25 +109,21 @@ class Taskbar(QMainWindow):
             self.setGeometry(0, 0, screen.width(), height)
         self.setStyleSheet("background-color: black;")
 
-        # Logo button
         self.logo_button = QPushButton(self)
         self.logo_button.setIcon(QIcon("logo.png"))
         self.logo_button.setIconSize(QSize(24, 24))
         self.logo_button.setGeometry(5, 3, 24, 24)
         self.logo_button.setStyleSheet("background: transparent; border: none;")
 
-        # Apps menu
         self.apps_menu = None
         self.logo_button.clicked.connect(self.toggle_apps_menu)
 
-        # Window buttons
         self.window_buttons = []
         self.window_area = QWidget(self)
         self.window_area.setGeometry(40, 0, screen.width() - 140, 30)
         self.window_layout = QHBoxLayout(self.window_area)
         self.window_layout.setSpacing(5)
 
-        # System tray
         self.tray = SystemTray()
         self.tray.setParent(self)
         self.tray.setGeometry(screen.width() - 100, 0, 100, 30)
@@ -142,7 +142,6 @@ class Taskbar(QMainWindow):
         btn = QPushButton(window_title, self.window_area)
         btn.setStyleSheet("color: white; background: #333; border: none;")
         btn.setFixedWidth(150)
-        btn.clicked.connect(lambda: print(f"Focus {window_title}"))  # Placeholder for focus
         btn.setToolTip(window_title)
         self.window_layout.addWidget(btn)
         self.window_buttons.append(btn)
