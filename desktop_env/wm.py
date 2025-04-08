@@ -2,12 +2,16 @@ from Xlib import X, display
 from Xlib.ext import record
 from Xlib.protocol import rq
 
+# Global list to track open windows
+open_windows = []
+
 def get_window_under_cursor(d):
     pointer = d.screen().root.query_pointer()
     win = pointer.child
     return win
 
 def start_window_manager():
+    global open_windows
     d = display.Display()
     root = d.screen().root
     root.change_attributes(event_mask=X.SubstructureRedirectMask | X.SubstructureNotifyMask | X.ButtonPressMask | X.ButtonReleaseMask | X.PointerMotionMask | X.KeyPressMask)
@@ -23,6 +27,12 @@ def start_window_manager():
             win = event.window
             win.map()
             win.change_attributes(event_mask=X.EnterWindowMask)
+            # Get window name (simplified)
+            try:
+                name = win.get_wm_name() or "Untitled"
+            except:
+                name = "Untitled"
+            open_windows.append({"id": win.id, "name": name})
 
         elif event.type == X.EnterNotify:
             win = event.window
@@ -44,7 +54,6 @@ def start_window_manager():
             pointer = root.query_pointer()
             new_x = pointer.root_x - drag_start[0]
             new_y = pointer.root_y - drag_start[1]
-            # Window snapping (left/right)
             screen_width = root.get_geometry().width
             if new_x < 50:
                 drag_window.configure(x=0, y=0, width=screen_width//2, height=root.get_geometry().height)
@@ -62,12 +71,11 @@ def start_window_manager():
         elif event.type == X.KeyPress:
             keycode = event.detail
             state = event.state
-            # Alt + M to minimize
             if keycode == 58 and state & X.Mod1Mask:  # Alt + M
                 win = get_window_under_cursor(d)
                 if win:
                     win.unmap()
-            # Alt + F to maximize/restore
+                    open_windows = [w for w in open_windows if w["id"] != win.id]
             elif keycode == 41 and state & X.Mod1Mask:  # Alt + F
                 win = get_window_under_cursor(d)
                 if win:
