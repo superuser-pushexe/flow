@@ -92,22 +92,16 @@ class AppsMenu(QWidget):
         elif event.key() == Qt.Key_Escape:
             self.close()
 
-class Taskbar(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
-        self.config = load_config()
-        self.apps = self.config.get("apps", [])
-        self.windows = []  # Track open windows
-
-        position = self.config.get("taskbar_position", "top")
-        screen = QApplication.primaryScreen().geometry()
-        height = 30
-        if position == "bottom":
-            self.setGeometry(0, screen.height() - height, screen.width(), height)
-        else:
-            self.setGeometry(0, 0, screen.width(), height)
-        self.setStyleSheet("background-color: black;")
+    def choose_color(self):
+        color = QColorDialog.getColor()
+        if color.isValid():
+            self.config["theme_color"] = color.name()
+            self.save_config()
+            # Apply to all components (simplified)
+            QApplication.instance().setStyleSheet(f"""
+                QWidget {{ background-color: {color.name()}; }}
+                QPushButton {{ background-color: {color.name()}; }}
+            """)
 
         self.logo_button = QPushButton(self)
         self.logo_button.setIcon(QIcon("logo.png"))
