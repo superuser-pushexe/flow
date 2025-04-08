@@ -2,9 +2,10 @@ import json
 from pathlib import Path
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QLabel, QPushButton, QFileDialog,
-    QVBoxLayout, QListWidget, QHBoxLayout, QLineEdit, QListWidgetItem, QMessageBox
+    QVBoxLayout, QListWidget, QHBoxLayout, QLineEdit, QListWidgetItem, QMessageBox, QComboBox, QColorDialog
 )
 from desktop_env.wallpaper import set_wallpaper
+import sys
 
 CONFIG_PATH = Path(__file__).parent / "config.json"
 
@@ -19,6 +20,7 @@ class SettingsApp(QWidget):
 
         self.init_wallpaper_section()
         self.init_apps_section()
+        self.init_appearance_section()
 
     def load_config(self):
         with open(CONFIG_PATH, "r") as f:
@@ -33,9 +35,7 @@ class SettingsApp(QWidget):
         self.wallpaper_btn = QPushButton("Change Wallpaper")
         self.wallpaper_btn.clicked.connect(self.choose_wallpaper)
         self.layout.addWidget(self.wallpaper_btn)
-        self.theme_button = QPushButton("Toggle Theme")
-        self.theme_button.clicked.connect(self.toggle_theme)
-        layout.addWidget(self.theme_button)
+
     def choose_wallpaper(self):
         file, _ = QFileDialog.getOpenFileName(self, "Select Wallpaper")
         if file:
@@ -100,6 +100,39 @@ class SettingsApp(QWidget):
             del self.config["apps"][index]
         self.save_config()
 
+    def init_appearance_section(self):
+        self.layout.addWidget(QLabel("Appearance:"))
+
+        # Taskbar position
+        taskbar_layout = QHBoxLayout()
+        taskbar_layout.addWidget(QLabel("Taskbar Position:"))
+        self.taskbar_pos = QComboBox()
+        self.taskbar_pos.addItems(["top", "bottom"])
+        self.taskbar_pos.setCurrentText(self.config.get("taskbar_position", "top"))
+        self.taskbar_pos.currentTextChanged.connect(self.update_taskbar_position)
+        taskbar_layout.addWidget(self.taskbar_pos)
+        self.layout.addLayout(taskbar_layout)
+
+        # Theme color
+        color_layout = QHBoxLayout()
+        color_layout.addWidget(QLabel("Theme Color:"))
+        self.color_btn = QPushButton("Choose Color")
+        self.color_btn.clicked.connect(self.choose_color)
+        color_layout.addWidget(self.color_btn)
+        self.layout.addLayout(color_layout)
+
+    def update_taskbar_position(self, position):
+        self.config["taskbar_position"] = position
+        self.save_config()
+        QMessageBox.information(self, "Restart Required", "Please restart Flow Desktop to apply taskbar position.")
+
+    def choose_color(self):
+        color = QColorDialog.getColor()
+        if color.isValid():
+            self.config["theme_color"] = color.name()
+            self.save_config()
+            self.setStyleSheet(f"background-color: {color.name()};")
+
 def start_settings_app():
     app = QApplication(sys.argv)
 
@@ -111,7 +144,6 @@ def start_settings_app():
     else:
         app.setStyleSheet(open("light.qss").read())
 
-    win = SettingsWindow()
+    win = SettingsApp()
     win.show()
     app.exec_()
-
