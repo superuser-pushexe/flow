@@ -8,8 +8,6 @@ A **minimal X11 desktop environment** written (almost) entirely in **Python 3.12
 - ✅ GUI settings app to change the wallpaper  
 - ✅ Optional `.deb` installer for easy system integration  
 
-> ⚠️ This project is experimental and built as a lightweight alternative DE. Not intended for production desktops yet.
-
 ---
 
 
@@ -112,8 +110,8 @@ This opens a file dialog where you can pick an image. It will update the config 
 
 ### ❓ FAQ
 #### Can I use this as my daily driver?
-Not recommended. This is a minimal, experimental desktop for educational or hacking purposes.
-
+Yes! This is a minimal, experimental desktop for educational or hacking purposes.
+However, as of v1.0.2, it's actually pretty functional!
 #### Does it support Wayland?
 No — this project only works with X11.
 
