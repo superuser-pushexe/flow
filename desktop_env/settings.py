@@ -33,7 +33,9 @@ class SettingsApp(QWidget):
         self.wallpaper_btn = QPushButton("Change Wallpaper")
         self.wallpaper_btn.clicked.connect(self.choose_wallpaper)
         self.layout.addWidget(self.wallpaper_btn)
-
+        self.theme_button = QPushButton("Toggle Theme")
+        self.theme_button.clicked.connect(self.toggle_theme)
+        layout.addWidget(self.theme_button)
     def choose_wallpaper(self):
         file, _ = QFileDialog.getOpenFileName(self, "Select Wallpaper")
         if file:
