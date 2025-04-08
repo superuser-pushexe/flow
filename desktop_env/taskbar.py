@@ -128,6 +128,31 @@ class Taskbar(QMainWindow):
         self.tray.setParent(self)
         self.tray.setGeometry(screen.width() - 100, 0, 100, 30)
 
+        # Timer to update window list
+        self.window_timer = QTimer()
+        self.window_timer.timeout.connect(self.update_windows)
+        self.window_timer.start(1000)
+        self.update_windows()
+
+    def update_windows(self):
+        global open_windows
+        # Clear existing buttons
+        for btn in self.window_buttons:
+            self.window_layout.removeWidget(btn)
+            btn.deleteLater()
+        self.window_buttons.clear()
+
+        # Add new buttons for open windows
+        for win in open_windows:
+            btn = QPushButton(win["name"], self.window_area)
+            btn.setStyleSheet("color: white; background: #333; border: none;")
+            btn.setFixedWidth(150)
+            btn.setToolTip(win["name"])
+            self.window_layout.addWidget(btn)
+            self.window_buttons.append(btn)
+
+    # Rest of the class remains the same
+
     def toggle_apps_menu(self):
         if self.apps_menu is None or not self.apps_menu.isVisible():
             self.apps_menu = AppsMenu(self.apps, self)
