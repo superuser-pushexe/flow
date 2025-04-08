@@ -101,7 +101,17 @@ class SettingsApp(QWidget):
         self.save_config()
 
 def start_settings_app():
-    app = QApplication([])
-    window = SettingsApp()
-    window.show()
+    app = QApplication(sys.argv)
+
+    with open("config.json", "r") as f:
+        config = json.load(f)
+    theme = config.get("theme", "light")
+    if theme == "dark":
+        app.setStyleSheet(open("dark.qss").read())
+    else:
+        app.setStyleSheet(open("light.qss").read())
+
+    win = SettingsWindow()
+    win.show()
     app.exec_()
+
