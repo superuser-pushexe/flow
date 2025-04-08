@@ -1,4 +1,5 @@
 import os
+import shutil
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDesktopWidget, QLabel, QMenu, QAction
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QPixmap, QIcon
@@ -12,8 +13,13 @@ class Desktop(QMainWindow):
 
         self.icons = []
         self.load_desktop_items()
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.show_desktop_context_menu)
 
     def load_desktop_items(self):
+        for icon in self.icons:
+            icon.deleteLater()
+        self.icons.clear()
         desktop_path = os.path.expanduser("~/Desktop")
         for item in os.listdir(desktop_path):
             item_path = os.path.join(desktop_path, item)
@@ -34,9 +40,27 @@ class Desktop(QMainWindow):
         open_action.triggered.connect(lambda: os.system(f"xdg-open '{path}'"))
         menu.addAction(open_action)
         delete_action = QAction("Delete", self)
-        delete_action.triggered.connect(lambda: os.remove(path) or self.load_desktop_items())
+        delete_action.triggered.connect(lambda: (shutil.rmtree(path) if os.path.isdir(path) else os.remove(path)) or self.load_desktop_items())
         menu.addAction(delete_action)
         menu.exec_(icon.mapToGlobal(pos))
+
+    def show_desktop_context_menu(self, pos):
+        menu = QMenu(self)
+        new_folder_action = QAction("New Folder", self)
+        new_folder_action.triggered.connect(self.create_new_folder)
+        menu.addAction(new_folder_action)
+        menu.exec_(self.mapToGlobal(pos))
+
+    def create_new_folder(self):
+        desktop_path = os.path.expanduser("~/Desktop")
+        base_name = "New Folder"
+        new_folder = os.path.join(desktop_path, base_name)
+        counter = 1
+        while os.path.exists(new_folder):
+            new_folder = os.path.join(desktop_path, f"{base_name} {counter}")
+            counter += 1
+        os.makedirs(new_folder)
+        self.load_desktop_items()
 
     def start_drag(self, event, icon):
         if event.buttons() == Qt.LeftButton:
