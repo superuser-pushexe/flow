@@ -96,6 +96,20 @@ Edit the config.json file:
 `python3 desktop_env/settings.py`
 This opens a file dialog where you can pick an image. It will update the config automatically and refresh your wallpaper.
 
+### Goals
+- [ ] Add workspace/multi-desktop support.
+- [ ] Improve window snapping and resizing logic in `wm.py`.
+- [ ] Add system tray functionality in `taskbar.py`.
+- [ ] Implement basic compositing for transparency/shadows.
+- [ ] Add volume and network widgets to the taskbar.
+- [ ] Refactor `main.py` to allow plugin-based components.
+- [ ] Add dark/light mode switching in the settings GUI.
+- [ ] Support for auto-launching user apps on startup.
+- [ ] Replace `feh` with native wallpaper rendering in PyQt5.
+- [ ] Improve error handling and logging across all modules.
+- [ ] Use `pydbus` or `dbus-python` to interface with system services.
+- [ ] Add tests and continuous integration via GitHub Actions.
+
 ### ❓ FAQ
 #### Can I use this as my daily driver?
 Not recommended. This is a minimal, experimental desktop for educational or hacking purposes.
