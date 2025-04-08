@@ -3,6 +3,18 @@ from desktop_env.wm import start_window_manager
 from desktop_env.taskbar import start_taskbar
 from desktop_env.wallpaper import set_wallpaper_from_config
 from desktop_env.settings import start_settings_app
+import os
+import json
+
+default_config = {
+    "theme": "light",
+    "wallpaper": "/usr/share/backgrounds/default.jpg"
+}
+
+if not os.path.exists("config.json"):
+    with open("config.json", "w") as f:
+        json.dump(default_config, f, indent=4)
+
 
 def main():
     set_wallpaper_from_config()
