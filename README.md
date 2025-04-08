@@ -1,7 +1,9 @@
 # Flow Desktop
 
-A lightweight, customizable desktop environment built with Python, PyQt5, and Xlib. Flow Desktop aims to provide a modern desktop experience similar to KDE Plasma, with features like desktop icons, a taskbar with app launcher, system tray, and window management.
+A lightweight, customizable desktop environment built with Python, PyQt5, and Xlib. Flow Desktop aims to provide a lightweight, modern desktop experience similar to other major desktops, with features like desktop icons, a taskbar with app launcher, system tray, and window management.
 
+## Website 
+https://superuser-pushexe.github.io/
 ## Features
 - **Desktop Icons**: View and interact with files/folders on the desktop with drag-and-drop and context menus.
 - **Taskbar**: Includes an app launcher with search, window previews, and a system tray showing clock, battery, and network status.
