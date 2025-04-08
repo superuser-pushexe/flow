@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QSize, QTimer, QTime
+from tray import SystemTray
 
 CONFIG_PATH = "config.json"
 
@@ -53,6 +54,8 @@ def start_taskbar():
     clock_label.setStyleSheet("color: white; font-family: monospace;")
     clock_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
     clock_label.setGeometry(700, 0, 95, 30)
+    self.tray = SystemTray()
+    layout.addWidget(self.tray)
 
     def update_clock():
         current_time = QTime.currentTime().toString("hh:mm:ss AP")
