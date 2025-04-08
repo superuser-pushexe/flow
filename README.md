@@ -1,134 +1,46 @@
-# Flow: A Python X11 Desktop Environment
+# Flow Desktop
 
-A **minimal X11 desktop environment** written (almost) entirely in **Python 3.12**, featuring:
+A lightweight, customizable desktop environment built with Python, PyQt5, and Xlib. Flow Desktop aims to provide a modern desktop experience similar to KDE Plasma, with features like desktop icons, a taskbar with app launcher, system tray, and window management.
 
-- ✅ Custom wallpaper support  
-- ✅ Floating window manager  
-- ✅ Taskbar built with PyQt5  
-- ✅ GUI settings app to change the wallpaper  
-- ✅ Optional `.deb` installer for easy system integration  
+## Features
+- **Desktop Icons**: View and interact with files/folders on the desktop with drag-and-drop and context menus.
+- **Taskbar**: Includes an app launcher with search, window previews, and a system tray showing clock, battery, and network status.
+- **Window Management**: Supports window dragging, snapping (left/right), minimize (Alt+M), and maximize/restore (Alt+F).
+- **Settings App**: Customize wallpaper, taskbar position, theme colors, and manage taskbar apps.
+- **Cross-Platform Wallpaper**: Wallpaper support for Linux, Windows, and macOS.
 
----
+## Requirements
+- Python 3.x
+- PyQt5 (`pip install PyQt5`)
+- Xlib (Linux only, `pip install python-xlib`)
+- psutil (`pip install psutil`)
 
+## Installation
+### 1. Clone the repository:
+git clone https://github.com/superuser-pushexe/flow.git
+cd flow
 
-## 📦 Features
+### 2. Install dependencies:
+pip install -r requirements.txt
 
-| Component         | Description                                  |
-|------------------|----------------------------------------------|
-| **Window Manager**   | Handles basic map requests (floating)        |
-| **Taskbar**          | PyQt5 panel that stays on top                |
-| **Wallpaper Support**| Set using `feh` based on user config         |
-| **Settings App**     | GUI to change wallpaper via file dialog      |
-| **Session Support**  | Launchable from display managers (LightDM)   |
+Or manually: `pip install PyQt5 python-xlib psutil`
+### 3. Run the desktop:
+python main.py
 
----
+## Usage
+- **Taskbar**: Click the logo button to open the app launcher. Search and launch apps from the grid.
+- **Desktop**: Right-click files/folders to open or delete them. Drag to reposition.
+- **Window Management**:
+- Drag windows to snap them to the left/right half of the screen.
+- Press `Alt+M` to minimize a window.
+- Press `Alt+F` to maximize/restore a window.
+- **Settings**: Use the settings app to change wallpaper, taskbar position, theme colors, and manage apps.
 
-## 🚀 Getting Started
+## Configuration
+Edit `config.json` to customize:
+- `wallpaper`: Path to your wallpaper image.
+- `taskbar_position`: `"top"` or `"bottom"`.
+- `apps`: List of apps in the taskbar (e.g., `[{"name": "Terminal", "command": ["x-terminal-emulator"]}]`).
 
-###  Requirements
-
-- Python 3.12+
-- `PyQt5`
-- `python-xlib`
-- `feh` (for wallpaper management)
-- An X11 environment (e.g., Xorg)
-
----
-
-### 📦 Install Dependencies
-`sudo apt update
-sudo apt install feh
-pip install -r requirements.txt`
-
----
-
-### 🖥️ Running the Desktop Manually
-To run the desktop manually, use the following command:
-
-`python3 desktop_env/main.py`
-This will start the desktop environment directly from your terminal.
-
-### 🧱 Building and Installing the .deb Package (Optional)
-#### 🛠 Step 1: Build the .deb Package
-`chmod +x build_deb.sh
-./build_deb.sh`
-#### 📥 Step 2: Install the Package
-`sudo dpkg -i python-desktop-x11_1.0_all.deb
-sudo apt --fix-broken install`
-#### 🧪 Step 3: Use the Desktop
-Log out and select "Python Desktop" from your session manager (e.g., LightDM or GDM).
-
-### 📁 Project Structure
-
-
-```text
-python-desktop-x11/
-├── desktop_env/              # Core desktop components
-│   ├── main.py               # Entry point
-│   ├── wm.py                 # Window manager
-│   ├── taskbar.py            # Taskbar UI
-│   ├── wallpaper.py          # Wallpaper setter
-│   ├── settings.py           # Settings GUI
-│   └── config.json           # User configuration
-├── debian/                   # Debian packaging structure
-│   ├── DEBIAN/
-│   │   ├── control           # Package metadata
-│   │   └── postinst          # Post-install script
-│   └── usr/share/xsessions/
-│       └── python-desktop.desktop
-├── requirements.txt          # Python dependencies
-├── build_deb.sh              # .deb package builder
-├── LICENSE
-└── README.md
-```
-
-### 🖼 Customizing the Wallpaper
-#### Option 1: Manually edit the config file
-Edit the config.json file:
-
-`{
-  "wallpaper": "/usr/share/backgrounds/default.jpg"
-}`
-#### Option 2: Use the GUI settings app
-
-`python3 desktop_env/settings.py`
-This opens a file dialog where you can pick an image. It will update the config automatically and refresh your wallpaper.
-
-### Goals
-- [ ] Add workspace/multi-desktop support.
-- [✅] Improve window snapping and resizing logic in `wm.py`.
-- [✅] Add system tray functionality in `taskbar.py`.
-- [ ] Implement basic compositing for transparency/shadows.
-- [✅] Add volume and network widgets to the taskbar.
-- [ ] Refactor `main.py` to allow plugin-based components.
-- [✅] Add dark/light mode switching in the settings GUI.
-- [ ] Support for auto-launching user apps on startup.
-- [ ] Replace `feh` with native wallpaper rendering in PyQt5.
-- [✅] Improve error handling and logging across all modules.
-- [ ] Use `pydbus` or `dbus-python` to interface with system services.
-- [ ] Add tests and continuous integration via GitHub Actions.
-
-### ❓ FAQ
-#### Can I use this as my daily driver?
-Yes! This is a minimal, experimental desktop for educational or hacking purposes.
-However, as of v1.0.2, it's actually pretty functional!
-#### Does it support Wayland?
-No — this project only works with X11.
-
-#### Can I run this inside a VM or Xephyr?
-Yes! That’s a great way to test it without logging out of your current session.
-
-### 📃 License
-This project is licensed under the GPLv3 License.
-
-### 🙌 Credits
-PyQt5
-
-python-xlib
-
-feh
-
-### 🤝 Contributing
-Pull requests are welcome!
-
-If you'd like to add features, fix bugs, or request enhancements, feel free to open an issue.
+## Contributing
+Feel free to submit issues or pull requests to improve Flow Desktop!
