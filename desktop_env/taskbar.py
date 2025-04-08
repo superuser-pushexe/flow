@@ -3,7 +3,7 @@ import json
 import subprocess
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QPushButton, QVBoxLayout, QHBoxLayout, 
-    QListWidget, QListWidgetItem, QLineEdit, QWidget, QLabel, QGridLayout
+    QListWidget, QListWidgetItem, QLineEdit, QWidget, QLabel, QGridLayout, QToolTip
 )
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QSize, QTimer, QTime, QRect
@@ -31,21 +31,18 @@ class AppsMenu(QWidget):
         """)
         layout = QVBoxLayout()
 
-        # Search bar
         self.search_input = QLineEdit(self)
         self.search_input.setPlaceholderText("Search apps...")
         self.search_input.textChanged.connect(self.filter_apps)
         self.search_input.setStyleSheet("padding: 5px; background: #333; border: none;")
         layout.addWidget(self.search_input)
 
-        # Apps grid
         self.grid_widget = QWidget()
         self.grid_layout = QGridLayout(self.grid_widget)
         self.grid_layout.setSpacing(10)
         self.grid_widget.setStyleSheet("background: transparent;")
         layout.addWidget(self.grid_widget)
 
-        # Populate apps
         self.all_buttons = []
         self.update_grid(self.apps)
 
@@ -53,13 +50,11 @@ class AppsMenu(QWidget):
         self.adjustSize()
 
     def update_grid(self, apps):
-        # Clear existing buttons
         for button in self.all_buttons:
             self.grid_layout.removeWidget(button)
             button.deleteLater()
         self.all_buttons.clear()
 
-        # Add apps in a 3-column grid
         for i, app_entry in enumerate(apps):
             name = app_entry.get("name")
             command = app_entry.get("command")
@@ -87,49 +82,76 @@ class AppsMenu(QWidget):
         self.update_grid(filtered)
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Return仮 and self.all_buttons:
+        if event.key() == Qt.Key_Return and self.all_buttons:
             self.all_buttons[0].click()
         elif event.key() == Qt.Key_Escape:
             self.close()
 
-def start_taskbar():
-    config = load_config()
-    apps = config.get("apps", [])
+class Taskbar(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+        self.config = load_config()
+        self.apps = self.config.get("apps", [])
+        self.windows = []  # Track open windows
 
-    app = QApplication(sys.argv)
-    taskbar = QMainWindow()
-    taskbar.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
-    taskbar.setGeometry(0, 0, 800, 30)
-    taskbar.setStyleSheet("background-color: black;")
-
-    # Logo button
-    logo_button = QPushButton(taskbar)
-    logo_button.setIcon(QIcon("logo.png"))
-    logo_button.setIconSize(QSize(24, 24))
-    logo_button.setGeometry(5, 3, 24, 24)
-    logo_button.setStyleSheet("background: transparent; border: none;")
-
-    # Apps menu
-    apps_menu = None
-    def toggle_apps_menu():
-        nonlocal apps_menu
-        if apps_menu is None or not apps_menu.isVisible():
-            apps_menu = AppsMenu(apps, taskbar)
-            pos = logo_button.mapToGlobal(logo_button.rect().bottomLeft())
-            apps_menu.setGeometry(QRect(pos.x(), pos.y(), 300, 400))
-            apps_menu.show()
-            apps_menu.search_input.setFocus()
+        # Taskbar position from config
+        position = self.config.get("taskbar_position", "top")
+        screen = QApplication.primaryScreen().geometry()
+        height = 30
+        if position == "bottom":
+            self.setGeometry(0, screen.height() - height, screen.width(), height)
         else:
-            apps_menu.close()
-    logo_button.clicked.connect(toggle_apps_menu)
+            self.setGeometry(0, 0, screen.width(), height)
+        self.setStyleSheet("background-color: black;")
 
-    # System tray
-    tray = SystemTray()
-    tray.setParent(taskbar)
-    tray.setGeometry(700, 0, 100, 30)
+        # Logo button
+        self.logo_button = QPushButton(self)
+        self.logo_button.setIcon(QIcon("logo.png"))
+        self.logo_button.setIconSize(QSize(24, 24))
+        self.logo_button.setGeometry(5, 3, 24, 24)
+        self.logo_button.setStyleSheet("background: transparent; border: none;")
 
+        # Apps menu
+        self.apps_menu = None
+        self.logo_button.clicked.connect(self.toggle_apps_menu)
+
+        # Window buttons
+        self.window_buttons = []
+        self.window_area = QWidget(self)
+        self.window_area.setGeometry(40, 0, screen.width() - 140, 30)
+        self.window_layout = QHBoxLayout(self.window_area)
+        self.window_layout.setSpacing(5)
+
+        # System tray
+        self.tray = SystemTray()
+        self.tray.setParent(self)
+        self.tray.setGeometry(screen.width() - 100, 0, 100, 30)
+
+    def toggle_apps_menu(self):
+        if self.apps_menu is None or not self.apps_menu.isVisible():
+            self.apps_menu = AppsMenu(self.apps, self)
+            pos = self.logo_button.mapToGlobal(self.logo_button.rect().bottomLeft())
+            self.apps_menu.setGeometry(QRect(pos.x(), pos.y(), 300, 400))
+            self.apps_menu.show()
+            self.apps_menu.search_input.setFocus()
+        else:
+            self.apps_menu.close()
+
+    def add_window(self, window_title):
+        btn = QPushButton(window_title, self.window_area)
+        btn.setStyleSheet("color: white; background: #333; border: none;")
+        btn.setFixedWidth(150)
+        btn.clicked.connect(lambda: print(f"Focus {window_title}"))  # Placeholder for focus
+        btn.setToolTip(window_title)
+        self.window_layout.addWidget(btn)
+        self.window_buttons.append(btn)
+
+def start_taskbar():
+    app = QApplication(sys.argv)
+    taskbar = Taskbar()
     taskbar.show()
-    sys.exit(app.exec_())
+    app.exec_()
 
 if __name__ == "__main__":
     start_taskbar()
