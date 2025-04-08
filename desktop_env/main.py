@@ -5,6 +5,16 @@ from desktop_env.wallpaper import set_wallpaper_from_config
 from desktop_env.settings import start_settings_app
 import os
 import json
+import subprocess
+import sys
+
+required_modules = ['PyQt5', 'Xlib']
+for module in required_modules:
+    try:
+        __import__(module)
+    except ImportError:
+        print(f"Module '{module}' not found. Installing...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", module])
 
 default_config = {
     "theme": "light",
