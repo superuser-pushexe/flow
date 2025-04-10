@@ -1,4 +1,6 @@
 # Flow Desktop
+# This respository is archived. Visit the new one at: https://github.com/superuser-pushexe/Flow-Desktop
+(refractored to C)
 
 A lightweight, customizable desktop environment built with Python, PyQt5, and Xlib. Flow Desktop aims to provide a lightweight, modern desktop experience similar to other major desktops, with features like desktop icons, a taskbar with app launcher, system tray, and window management.
 
